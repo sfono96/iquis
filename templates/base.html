@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+		<title>iNQUIS</title>
+		
+		<link href="../static/css/main.css" rel="stylesheet" type="text/css" />
+		
+		<div id = "navheader">iNQUIS</div>
+		<div id = "navslogan">Weekly Assessment Tracking</div>
+	
+		<ul id = "navbar">
+			<li><a href="/grade/all">By Grade</a></li>
+			<li><a href="/crt_group/all">By CRT Group</a></li>
+			<li><a href="/teacher/all">By Teacher</a></li>
+			<li><a href="/">By Student</a></li>
+		</ul>
+	</head>
+
+	<body>
+		{% block for %}
+		{% endblock %}
+	</body>
+</html>

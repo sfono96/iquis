@@ -1,0 +1,61 @@
+
+#navheader      { margin-left: 100px; font-size: 3em; color:#377ba8; font-family: 'Georgia', serif;}
+#navslogan      { margin-left: 150px;}
+
+/* Nav bar stuff
+------------------------------------------*/
+#navbar,
+#navbar ul {
+    list-style: none;
+}
+#navbar {
+    float: left;
+    position: relative;
+}
+#navbar > li {
+    float: left;
+}
+#navbar li a {
+    display: block;
+    height: 2em;
+    line-height: 2em;
+    padding: 0 1.5em;
+    text-decoration: none;
+}
+#navbar ul {
+    position: absolute;
+    display: none;
+    z-index: 999;
+}
+#navbar ul li a {
+    width: 80px;
+}
+#navbar li:hover ul.noJS {
+    display: block;
+}
+
+/* Main menu
+------------------------------------------*/
+#navbar {
+    font-family: Arial;
+    font-size: 12px;
+    background: #2f8be8;
+}
+#navbar > li > a {
+    color: #fff;
+    font-weight: bold;
+}
+#navbar > li:hover > a {
+    background: #E6E6FA;
+    color: #000;
+}
+
+/* crt group selectors
+------------------------------------------*/ 
+#grade-by-crt ul {list-style: none;}
+
+
+.actions, .chart {
+    margin: 15px auto;
+    width: 34px;
+}
