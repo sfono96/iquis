@@ -174,7 +174,7 @@ def teachers(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, grad
 	title = {"text": title_text} 
 	xAxis = {"categories": teachers_by_grade_crt(grade,crt_group)[1], "title":{"text":'Assessment'}}
 	yAxis = {"title": {"text": 'Score %'}}
-	return render_template('teacher.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, grades=grades, crt_groups=crt_groups)
+	return render_template('teacher.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, grades=grades, crt_groups=crt_groups, grade=grade, crt_group=crt_group)
 
 # by students with grade, teacher, and crt group filters
 @app.route('/students/<grade>/<teacher>/<crt_group>')
@@ -185,7 +185,7 @@ def students(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, grad
 	title = {"text": title_text} 
 	xAxis = {"categories": students_by_grade_teacher_crt(grade,teacher,crt_group)[1], "title":{"text":'Assessment'}}
 	yAxis = {"title": {"text": 'Score %'}}
-	return render_template('student.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis,grades=grades,teachers=relevant_teachers(grade), crt_groups=crt_groups)
+	return render_template('student.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis,grades=grades,teachers=relevant_teachers(grade), crt_groups=crt_groups, grade=grade, teacher=teacher, crt_group=crt_group)
 
 ##################### run #####################
 

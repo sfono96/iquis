@@ -10,23 +10,42 @@
 
 <br><br><br>
 
-<h3>Grades</h3>
-{% for g in grades %}
-	<li><a href="/students/{{g}}/Mr. Sternberg/all"><button type="button">{{g}}</button></a></li>
-{% endfor %}
+<div id="selectors_shell">
+	<h3>Grades</h3>
+	<ul class="selectors">
+	{% for g in grades %}
+		{% if g == grade %}
+			<li><a href="/students/{{g}}/Mr. Sternberg/all"><div class="current_buttons">{{g[4:]}}</div></a></li>
+		{% else %}
+			<li><a href="/students/{{g}}/Mr. Sternberg/all"><div class="select_buttons">{{g[4:]}}</div></a></li>
+		{% endif %}
+	{% endfor %}
+	</ul>
+	<div style="clear:both;"></div>
+	<ul class="selectors">
+	<h3>Teachers</h3>
+	{% for t in teachers %}
+		{% if t == teacher %}
+			<li><a href="/students/0 - Kindergarten/{{t}}/all"><div class="current_buttons">{{t}}</div></a></li>
+		{% else %}
+			<li><a href="/students/0 - Kindergarten/{{t}}/all"><div class="select_buttons">{{t}}</div></a></li>
+		{% endif %}
+	{% endfor %}
+	</ul>
+	<div style="clear:both;"></div>
+	<ul class="selectors">
+	<h3>CRT Groups</h3>
+	{% for c in crt_groups %}
+		{% if c == crt_group %}
+			<li><a href="/students/0 - Kindergarten/Mr. Sternberg/{{c}}"><div class="current_buttons">{{c}}</div></a></li>
+		{% else %}
+			<li><a href="/students/0 - Kindergarten/Mr. Sternberg/{{c}}"><div class="select_buttons">{{c}}</div></a></li>
+		{% endif %}
+	{% endfor %}
+	</ul>
+</div>
 
-<h3>Teachers</h3>
-{% for t in teachers %}
-	<li><a href="/students/0 - Kindergarten/{{t}}/all"><button type="button">{{t}}</button></a></li>
-{% endfor %}
-
-<h3>CRT Groups</h3>
-{% for c in crt_groups %}
-	<li><a href="/students/0 - Kindergarten/Mr. Sternberg/{{c}}"><button type="button">{{c}}</button></a></li>
-{% endfor %}
-
-
-<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px"></div>
+<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin: 5px;"></div>
 	<script>
 		var chart_id = {{ chartID|safe }}
 		var series = {{ series|safe }}

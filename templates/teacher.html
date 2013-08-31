@@ -10,24 +10,32 @@
 
 <br><br><br>
 
-<!-- <ul id ="crt-by-grade">
-	{% for g in grades %}
-		<li><a href="/crt_group/{{g}}"><button type="button">{{g}}</button></a></li>
-	{% endfor %}
-</ul> -->
-
+<div id="selectors_shell">
 <h3>Grades</h3>
+<ul class="selectors">
 {% for g in grades %}
-	<li><a href="/teachers/{{g}}/all"><button type="button">{{g}}</button></a></li>
+	{% if g == grade %}
+		<li><a href="/teachers/{{g}}/all"><div class="current_buttons">{{g[4:]}}</div></a></li>
+	{% else %}
+		<li><a href="/teachers/{{g}}/all"><div class="select_buttons">{{g[4:]}}</div></a></li>
+	{% endif %}
 {% endfor %}
-
+</ul>
+<div style="clear:both;"></div>
 <h3>CRT Groups</h3>
+<ul class="selectors">
 {% for c in crt_groups %}
-	<li><a href="/teachers/0 - Kindergarten/{{c}}"><button type="button">{{c}}</button></a></li>
+	{% if c == crt_group %}
+		<li><a href="/teachers/0 - Kindergarten/{{c}}"><div class="current_buttons">{{c}}</div></a></li>
+	{% else %}
+		<li><a href="/teachers/0 - Kindergarten/{{c}}"><div class="select_buttons">{{c}}</div></a></li>
+	{% endif %}
 {% endfor %}
+</ul>
+</div>
 
 
-<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px"></div>
+<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin-top:5px;"></div>
 	<script>
 		var chart_id = {{ chartID|safe }}
 		var series = {{ series|safe }}
