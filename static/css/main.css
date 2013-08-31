@@ -50,11 +50,9 @@
     color: #000;
 }
 
-/* crt group selectors
-------------------------------------------*/ 
-#grade-by-crt ul {list-style: none;}
 
-
+/* Chart
+-----------------------------------------_*/
 .actions, .chart {
     margin: 15px auto;
     width: 34px;

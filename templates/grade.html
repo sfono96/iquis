@@ -3,11 +3,10 @@
 {% block for %}
 <br><br><br>
 
-<ul id ="grade-by-crt">
-	{% for c in crt_groups %}
-		<li><a href="/grade/{{c}}"><button type="button">{{c}}</button></a></li>
-	{% endfor %}
-</ul>
+<h3>CRT Score Groups</h3>
+{% for c in crt_groups %}
+	<li><a href="/grade/{{c}}"><button type="button">{{c}}</button></a></li>
+{% endfor %}
 
 <div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px"></div>
 		<script>

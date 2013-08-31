@@ -6,14 +6,25 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="../static/js/main.js"></script>
+<script src="/static/js/main.js"></script>
 
 <br><br><br>
 
-<h3>Grade Level</h3>
+<h3>Grades</h3>
 {% for g in grades %}
-	<li><a href="/crt_group/{{g}}"><button type="button">{{g}}</button></a></li>
+	<li><a href="/students/{{g}}/Mr. Sternberg/all"><button type="button">{{g}}</button></a></li>
 {% endfor %}
+
+<h3>Teachers</h3>
+{% for t in teachers %}
+	<li><a href="/students/0 - Kindergarten/{{t}}/all"><button type="button">{{t}}</button></a></li>
+{% endfor %}
+
+<h3>CRT Groups</h3>
+{% for c in crt_groups %}
+	<li><a href="/students/0 - Kindergarten/Mr. Sternberg/{{c}}"><button type="button">{{c}}</button></a></li>
+{% endfor %}
+
 
 <div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px"></div>
 	<script>
