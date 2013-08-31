@@ -11,9 +11,15 @@
 <br><br><br>
 
 <h3>Grade Level</h3>
+<ul class="selectors">
 {% for g in grades %}
-	<li><a href="/crt_group/{{g}}"><button type="button">{{g}}</button></a></li>
+	{% if g == grade %}
+		<li><a href="/crt_group/{{g}}"><div class="current_buttons">{{g[4:]}}</div></a></li>
+	{% else %}
+		<li><a href="/crt_group/{{g}}"><div class="select_buttons">{{g[4:]}}</div></a></li>
+	{% endif %}
 {% endfor %}
+</ul>
 
 <div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px"></div>
 	<script>

@@ -4,9 +4,15 @@
 <br><br><br>
 
 <h3>CRT Score Groups</h3>
+<ul class="selectors">
 {% for c in crt_groups %}
-	<li><a href="/grade/{{c}}"><button type="button">{{c}}</button></a></li>
+	{% if c == crt_group %}
+		<li><a href="/grade/{{c}}"><div class="current_buttons">{{c}}</div></a></li>
+	{% else %}
+		<li><a href="/grade/{{c}}"><div class="select_buttons">{{c}}</div></a></li>	
+	{% endif %}
 {% endfor %}
+</ul>
 
 <div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px"></div>
 		<script>

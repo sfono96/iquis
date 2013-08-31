@@ -151,7 +151,8 @@ def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, crt_gro
 	title = {"text": title_text} 
 	xAxis = {"categories": weeks, "title":{"text":'Week'}}
 	yAxis = {"title": {"text": 'Score %'}}
-	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis,crt_groups=crt_groups)
+	print crt_group
+	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, crt_groups=crt_groups, crt_group=crt_group)
 
 # by crt group with grade slicer
 @app.route('/crt_group/<grade>')
@@ -162,7 +163,7 @@ def crtGroup(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, grad
 	title = {"text": title_text} 
 	xAxis = {"categories": crt_by_grade(grade)[1], "title":{"text":'Assessment'}}
 	yAxis = {"title": {"text": 'Score %'}}
-	return render_template('crt_group.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis,grades=grades)
+	return render_template('crt_group.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis,grades=grades, grade=grade)
 
 # by teacher with grade and crt group filters
 @app.route('/teachers/<grade>/<crt_group>')

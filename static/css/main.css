@@ -50,10 +50,117 @@
     color: #000;
 }
 
+/* Crt Group Selectors
+-----------------------------------------_*/
+
+h3 {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    color: #484848;
+    margin-left: 15px;
+}
+
+.selectors {
+    float: left;
+    width: 200px;
+    list-style: none;
+    display: block;
+    margin: 0 50px 0 -25px;
+}
+
+.selectors li{
+    font-family: arial, helvetica, sans-serif;
+}
+
+.selectors a:link {
+    color:#333333;
+    text-decoration: none;
+    }      /* unvisited link */
+.selectors a:visited {
+    color:#333333;
+    }  /* visited link */
+.selectors a:hover {
+    color:#333333;
+    }  /* mouse over link */
+.selectors a:active {
+    color:#333333;
+    }  /* selected link */ 
+
+.selectors a:link .select_buttons{
+    height:0px;
+    background-color: #ffffff;
+    border: 1px #cccccc solid;
+    text-align: center;
+    vertical-align: text-middle;
+    padding: 5px 0 25px 0;
+}
+
+.selectors a:visited .select_buttons{
+    height:0px;
+    background-color: #ffffff;
+    border: 1px #cccccc solid;
+    padding: 5px 0 25px 0;
+}
+
+.selectors a:hover .select_buttons{
+    height:0px;
+    background-color: #cccccc;
+    border: 1px #999999 solid;
+    padding: 5px 0 25px 0;
+}
+
+.selectors a:active .select_buttons{
+    height:0px;
+    background-color: #999999;
+    color: #ffffff;
+    border: 1px #666666 solid;
+    padding: 5px 0 25px 0;
+}
+
+
+.selectors a:link .current_buttons{
+    height:0px;
+    background-color: #999999;
+    color: #ffffff;
+    border: 1px #666666 solid;
+    text-align: center;
+    vertical-align: text-middle;
+    padding: 5px 0 25px 0;
+}
+
+.selectors a:visited .current_buttons{
+    height:0px;
+    background-color: #999999;
+    color: #ffffff;
+    border: 1px #666666 solid;
+    text-align: center;
+    vertical-align: text-middle;
+    padding: 5px 0 25px 0;
+}
+
+.selectors a:hover .current_buttons{
+    height:0px;
+    background-color: #cccccc;
+    border: 1px #999999 solid;
+    padding: 5px 0 25px 0;
+}
+
+.selectors a:active .current_buttons{
+    height:0px;
+    background-color: #999999;
+    color: #ffffff;
+    border: 1px #666666 solid;
+    padding: 5px 0 25px 0;
+}
+
 
 /* Chart
 -----------------------------------------_*/
 .actions, .chart {
     margin: 15px auto;
     width: 34px;
+    float:left;
+    margin-top: -50px;
 }
