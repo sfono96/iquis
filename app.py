@@ -22,25 +22,13 @@ def average(list):
 def relevant_teachers(grade):
 	return sorted(set([row['teacher'] for row in mylist if row['grade'] == grade]))
 
+# split out the checkbox values
+def split_out_grade(list):
+	crt_group_list = [i[2:] for i in list if i[0] == 'c']
+	grade_list = [i[2:] for i in list if i[0] == 'g']
+	return crt_group_list, grade_list
+
 # method to filter on CRT level and show all grades
-# def grade_by_crt(crt):
-# 	data_series = []
-# 	for grade in grades:
-# 		data = []
-# 		for week in weeks:
-# 			if crt == 'all':
-# 				scores = [float(row['score']) for row in mylist if row['grade'] == grade if row['week'] == week]
-# 			else:	
-# 				scores = [float(row['score']) for row in mylist if row['grade'] == grade if row['week'] == week if row['CRT Score Group'] == crt]
-# 			data.append(average(scores))
-# 		dict = {}
-# 		dict['name'] = grade
-# 		dict['data'] = data
-# 		data_series.append(dict)
-# 	return data_series
-
-############ TEST MULTIPLE COMBINS ###############
-
 def grade_by_crt(grade_list, crt_list):
 	# grade is the series filter crt is a data filter
 	mydict = {}
@@ -183,18 +171,18 @@ app = Flask(__name__)
 
 @app.route('/')
 @app.route('/grade', methods=['POST','GET'])
-def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, crt_groups = crt_groups, grades=grades):	
+def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, crt_groups = crt_groups, grades=grades, f_crt_groups=crt_groups, f_grades=grades):	
 	if request.method == 'POST':
-		print request.form.getlist("ck")
-		# crt_groups = split_out(request.form.getlist['Values'])[0]
-		# grades = split_out(request.form.getlist['Values'])[1]
+		# print request.form.getlist("ck")
+		f_crt_groups = split_out_grade(request.form.getlist("ck"))[0]
+		f_grades = split_out_grade(request.form.getlist("ck"))[1]
 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height}
-	series = grade_by_crt(grades,crt_groups)
+	series = grade_by_crt(f_grades,f_crt_groups)
 	title_text = 'Weekly Assessment Tracking - By Grade'
 	title = {"text": title_text} 
 	xAxis = {"categories": weeks, "title":{"text":'Week'}}
 	yAxis = {"title": {"text": 'Score %'}}
-	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, crt_groups=crt_groups,grades=grades)
+	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, crt_groups=crt_groups,grades=grades, f_crt_groups=f_crt_groups, f_grades=f_grades)
 
 # by crt group with grade slicer
 @app.route('/crt_group/<grade>')

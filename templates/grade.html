@@ -3,68 +3,44 @@
 {% block for %}
 <br><br><br>
 <form name="update" action="/grade" method="POST">
-	<div id="selectors_shell">
+	<div id="selectors_shell">	
 		<h3>CRT Score Groups</h3>
-		<!-- <ul class="slicers">
-		{% for c in crt_groups %}
-			<li><div class="ck-button"><span><label><input type="checkbox" name="checkbox" value="crt-{{c}}" />{{c}}</label></span><div></li>
-		{% endfor %}
-		</ul>
-	 -->
 		<ul class="slicers">
 			{% for c in crt_groups %}
-				<li>
-					<div class="ck-button">
-			   			<label>
-			      			<input type="checkbox" name="ck" value="crt-{{c}}"><span>{{c}}</span>
-			   			</label>	
-					</div>
-				</li> 
+				{% if c in f_crt_groups %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="c-{{c}}" checked><span>{{c}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="c-{{c}}"><span>{{c}}</span></label></div></li>
+				{% endif %}
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
 		<h3>Grade Level</h3>
 		<ul class="slicers">
 			{% for g in grades %}
-				<li>
-					<div class="ck-button">
-			   			<label>
-			      			<input type="checkbox" name="ck" value="g-{{g}}"><span>{{g[4:]}}</span>
-			   			</label>
-					</div>
-				</li> 
+				{% if g in f_grades %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="g-{{g}}" checked><span>{{g[4:]}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="g-{{g}}"><span>{{g[4:]}}</span></label></div></li>
+				{% endif %}
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-	
 	<input type="submit" id="update" value="Update Chart" style="width: 155px; margin: 20px 0 0 20px; height: 50px;" />
-	
-	
 	</div>
 </form>
-	<!-- <ul class="selectors">
-	{% for c in crt_groups %}
-		{% if c == crt_group %}
-			<li><a href="/grade/{{c}}"><div class="current_buttons">{{c}}</div></a></li>
-		{% else %}
-			<li><a href="/grade/{{c}}"><div class="select_buttons">{{c}}</div></a></li>	
-		{% endif %}
-	{% endfor %}
-	</ul>
-	 -->
+	
+<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin-top: 5px;"></div>
+<script>
+	var chart_id = {{ chartID|safe }}
+	var series = {{ series|safe }}
+	var title = {{ title|safe }}
+	var xAxis = {{ xAxis|safe }}
+	var yAxis = {{ yAxis|safe }}
+	var chart = {{ chart|safe }}
+</script>
 
-
-	<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin-top: 5px;"></div>
-	<script>
-		var chart_id = {{ chartID|safe }}
-		var series = {{ series|safe }}
-		var title = {{ title|safe }}
-		var xAxis = {{ xAxis|safe }}
-		var yAxis = {{ yAxis|safe }}
-		var chart = {{ chart|safe }}
-	</script>
-
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-	<script src="http://code.highcharts.com/highcharts.js"></script>
-	<script src="../static/js/main.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="../static/js/main.js"></script>
 {% endblock %}
