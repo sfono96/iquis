@@ -63,7 +63,7 @@ h3 {
     font-weight: bold;
     text-align: left;
     color: #484848;
-    margin-left: 15px;
+    margin-left: 32px;
 }
 
 .selectors {
@@ -181,7 +181,7 @@ h3 {
     width: 200px;
     list-style: none;
     /*display: block;*/
-    margin: 0 50px 0 -25px;
+    margin: 0 20px 0 -10px;
 }
 
 .slicers li{
