@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from data import mylist
+from decimal import *
 
 ##################### lists and methods #####################
 
@@ -17,6 +18,9 @@ def average(list):
 		return 0
 	else:
 		return float(sum(list))/float(len(list))
+
+def round_me(number):
+	 return Decimal(number).quantize(Decimal('.01'),rounding=ROUND_HALF_UP)
 
 # pulls back list of teachers based on grade level
 def relevant_teachers(grade):
@@ -54,58 +58,48 @@ def grade_by_crt(grade_list, crt_list):
 	data_series = sorted(data_series, key=lambda k: k['name']) 
 	return data_series
 
-# method to filter CRT Groups By Grade Level and return relevant assessments
-def crt_by_grade(grade):
-	# data series
+def crt_by_grade(crt_list,grade_list):
+	# crt is the series filter grade is a data filter
+	mydict = {}
+	for row in mylist:
+		if row['grade'] in grade_list and row['CRT Score Group'] in crt_list:
+			if row['CRT Score Group'] not in mydict:
+				mydict[row['CRT Score Group']] = {}
+			if row['standard'] not in mydict[row['CRT Score Group']]:
+				mydict[row['CRT Score Group']][row['standard']] = []
+			mydict[row['CRT Score Group']][row['standard']].append(round_me(row['score']))
+	
 	data_series = []
-	for crt in crt_groups: # each crt group is a series
-		data = [] # this will be one average score per relevant assessment for the respective crt group
-		for a in assessments:
-			if grade == 'all':
-				scores = [float(row['score']) for row in mylist if row['CRT Score Group'] == crt if row['standard'] == a]
-				data.append(average(scores))
-			else:
-				scores = [float(row['score']) for row in mylist if row['CRT Score Group'] == crt if row['standard'] == a if row['grade'] == grade]
-				if sum(scores) > 0:
-					data.append(average(scores))
-		dict = {}
-		dict['name'] = crt
-		dict['data'] = data
-		data_series.append(dict)
+	for i in mydict:
+		for j in mydict[i]:
+			mydict[i][j] = average(mydict[i][j])
+		crt_dict = {}
+		crt_dict['name'] = i
+		crt_dict['data'] = [(j, mydict[i][j]) for j in mydict[i]] # throw tuples into list so i can sort by assessment then ditch assessments and keep only score
+		crt_dict['data'] = sorted(crt_dict['data'])
+		crt_dict['data'] = [l[1] for l in crt_dict['data']]
+		data_series.append(crt_dict)
 
-	# # new improved code (not quite done yet)
-	# mydict = {}
-	# for row in mylist:
-	# 	if grade == 'all' or row['grade'] == grade:
-	# 		if row['CRT Score Group'] not in mydict:
-	# 			mydict[row['CRT Score Group']] = {}
-	# 		if row['standard'] not in mydict[row['CRT Score Group']]:
-	# 			mydict[row['CRT Score Group']][row['standard']] = []
-	# 		mydict[row['CRT Score Group']][row['standard']].append(float(row['score']))
-	# 	for i in mydict:
-	# 		for j in mydict[i]:
-	# 			mydict[i][j] = average(mydict[i][j])
-				
+	data_series = sorted(data_series, key=lambda k: k['name']) 				
 
 	# relevant assessments
 	if grade == 'all':
 		relevant_assessments = assessments	
 	else:
-		relevant_assessments = sorted(set([row['standard'] for row in mylist if row['grade'] == grade]))
+		relevant_assessments = sorted(set([row['standard'] for row in mylist if row['grade'] in grade_list]))
 	
 	return data_series, relevant_assessments
 
 # method to filter teachers by grade by crt group levels and return relevant assessments
-def teachers_by_grade_crt(grade,crt_group):
+def teachers_by_grade_crt(grade_list,crt_list):
 	mydict = {}
 	for row in mylist:
-		if crt_group == 'all' or row['CRT Score Group'] == crt_group:
-			if row['grade'] == grade: # if it is the target grade
-				if row['teacher'] not in mydict:
-					mydict[row['teacher']] = {}
-				if row['standard'] not in mydict[row['teacher']]:
-					mydict[row['teacher']][row['standard']] = []
-				mydict[row['teacher']][row['standard']].append(float(row['score']))
+		if row['CRT Score Group'] in crt_list and row['grade'] in grade_list :
+			if row['teacher'] not in mydict:
+				mydict[row['teacher']] = {}
+			if row['standard'] not in mydict[row['teacher']]:
+				mydict[row['teacher']][row['standard']] = []
+			mydict[row['teacher']][row['standard']].append(round_me(row['score']))
 
 	data_series = []
 	for i in mydict:
@@ -121,10 +115,7 @@ def teachers_by_grade_crt(grade,crt_group):
 	data_series = sorted(data_series)		
 	
 	# relevant assessments
-	if grade == 'all':
-		relevant_assessments = assessments	
-	else:
-		relevant_assessments = sorted(set([row['standard'] for row in mylist if row['grade'] == grade]))
+	relevant_assessments = sorted(set([row['standard'] for row in mylist if row['grade'] in grade_list]))
 
 	return data_series, relevant_assessments
 
@@ -156,24 +147,11 @@ app = Flask(__name__)
 
 ##################### routes #####################
 
-# by grade with crt group slicer
-# @app.route('/')
-# @app.route('/grade/<crt_group>')
-# def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, crt_group = 'all'):	
-# 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
-# 	series = grade_by_crt(crt_group) 
-# 	title_text = 'Weekly Assessment Tracking - By Grade - CRT Group: %s' % str(crt_group)
-# 	title = {"text": title_text} 
-# 	xAxis = {"categories": weeks, "title":{"text":'Week'}}
-# 	yAxis = {"title": {"text": 'Score %'}}
-# 	print crt_group
-# 	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, crt_groups=crt_groups, crt_group=crt_group)
-
+# by grade with crt group slicers
 @app.route('/')
 @app.route('/grade', methods=['POST','GET'])
-def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, crt_groups = crt_groups, grades=grades, f_crt_groups=crt_groups, f_grades=grades):	
+def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, f_crt_groups=crt_groups, f_grades=grades):	
 	if request.method == 'POST':
-		# print request.form.getlist("ck")
 		f_crt_groups = split_out_grade(request.form.getlist("ck"))[0]
 		f_grades = split_out_grade(request.form.getlist("ck"))[1]
 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height}
@@ -185,30 +163,39 @@ def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, crt_gro
 	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, crt_groups=crt_groups,grades=grades, f_crt_groups=f_crt_groups, f_grades=f_grades)
 
 # by crt group with grade slicer
-@app.route('/crt_group/<grade>')
-def crtGroup(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, grade = '0 - Kindergarten'):	
-	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
-	series = crt_by_grade(grade)[0] 
-	title_text = 'Weekly Assessment Tracking - By CRT Group - %s' % str(grade[4:])
+@app.route('/crt_group', methods=['POST','GET'])
+def crtGroup(chartID = 'chart_ID', chart_type = 'line', chart_height = 500 ,f_grades='0 - Kindergarten',f_crt_groups=crt_groups):	
+	if request.method == 'POST':
+		f_crt_groups = split_out_grade(request.form.getlist("ck"))[0]
+		f_grades = split_out_grade(request.form.getlist("ck"))[1]
+	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height}
+	series = crt_by_grade(f_crt_groups,f_grades)[0]
+	title_text = 'Weekly Assessment Tracking - By CRT Group'
 	title = {"text": title_text} 
-	xAxis = {"categories": crt_by_grade(grade)[1], "title":{"text":'Assessment'}}
+	xAxis = {"categories": crt_by_grade(f_crt_groups,f_grades)[1], "title":{"text":'Assessment'}}
 	yAxis = {"title": {"text": 'Score %'}}
-	return render_template('crt_group.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis,grades=grades, grade=grade)
+	return render_template('crt_group.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis,grades=grades, crt_groups=crt_groups,f_grades=f_grades,f_crt_groups=f_crt_groups)
 
 # by teacher with grade and crt group filters
-@app.route('/teachers/<grade>/<crt_group>')
-def teachers(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, grade = '0 - Kindergarten', crt_group = 'all'):	
+@app.route('/teachers',methods=['POST','GET'])
+def teachers(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, f_grades=['0 - Kindergarten'], f_crt_groups=crt_groups):	
+	if request.method == 'POST':
+		f_crt_groups = split_out_grade(request.form.getlist("ck"))[0]
+		f_grades = split_out_grade(request.form.getlist("ck"))[1]
 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
-	series = teachers_by_grade_crt(grade,crt_group)[0] 
-	title_text = 'Weekly Assessment Tracking - By Teacher - %s -%s' % (str(grade[4:]),str(crt_group))
+	series = teachers_by_grade_crt(f_grades,f_crt_groups)[0] 
+	title_text = 'Weekly Assessment Tracking - By Teacher'
 	title = {"text": title_text} 
-	xAxis = {"categories": teachers_by_grade_crt(grade,crt_group)[1], "title":{"text":'Assessment'}}
+	xAxis = {"categories": teachers_by_grade_crt(f_grades,f_crt_groups)[1], "title":{"text":'Assessment'}}
 	yAxis = {"title": {"text": 'Score %'}}
-	return render_template('teacher.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, grades=grades, crt_groups=crt_groups, grade=grade, crt_group=crt_group)
+	return render_template('teacher.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, grades=grades, crt_groups=crt_groups, f_grades=f_grades, f_crt_groups=f_crt_groups)
+
 
 # by students with grade, teacher, and crt group filters
-@app.route('/students/<grade>/<teacher>/<crt_group>')
-def students(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, grade = '0 - Kindergarten', teacher = 'Mr. Sternberg', crt_group = 'all'):	
+@app.route('/students',methods=['POST','GET'])
+def students(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, f_grades = ['0 - Kindergarten'], f_teacher = ['Mr. Sternberg'], f_crt_groups=crt_groups):	
+	#if request.method == 'POST':
+
 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
 	series = students_by_grade_teacher_crt(grade,teacher,crt_group)[0]
 	title_text = 'Weekly Assessment Tracking - By Students - %s - %s' % (str(grade[4:]),str(teacher))

@@ -10,32 +10,35 @@
 
 <br><br><br>
 
-<div id="selectors_shell">
-<h3>Grades</h3>
-<ul class="selectors">
-{% for g in grades %}
-	{% if g == grade %}
-		<li><a href="/teachers/{{g}}/all"><div class="current_buttons">{{g[4:]}}</div></a></li>
-	{% else %}
-		<li><a href="/teachers/{{g}}/all"><div class="select_buttons">{{g[4:]}}</div></a></li>
-	{% endif %}
-{% endfor %}
-</ul>
-<div style="clear:both;"></div>
-<h3>CRT Groups</h3>
-<ul class="selectors">
-{% for c in crt_groups %}
-	{% if c == crt_group %}
-		<li><a href="/teachers/0 - Kindergarten/{{c}}"><div class="current_buttons">{{c}}</div></a></li>
-	{% else %}
-		<li><a href="/teachers/0 - Kindergarten/{{c}}"><div class="select_buttons">{{c}}</div></a></li>
-	{% endif %}
-{% endfor %}
-</ul>
-</div>
+<form name="update" action="/teachers" method="POST">
+	<div id="selectors_shell">	
+		<h3>Grade Level</h3>
+		<ul class="slicers">
+			{% for g in grades %}
+				{% if g in f_grades %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="g-{{g}}" checked><span>{{g[4:]}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="g-{{g}}"><span>{{g[4:]}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	<div style="clear:both;"></div>
+		<h3>CRT Score Groups</h3>
+		<ul class="slicers">
+			{% for c in crt_groups %}
+				{% if c in f_crt_groups %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="c-{{c}}" checked><span>{{c}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="c-{{c}}"><span>{{c}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	<div style="clear:both;"></div>
+	<input type="submit" id="update" value="Update Chart" style="width: 155px; margin: 20px 0 0 20px; height: 50px;" />
+	</div>
+</form>
 
-
-<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin-top:5px;"></div>
+<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin-top: 5px;"></div>
 	<script>
 		var chart_id = {{ chartID|safe }}
 		var series = {{ series|safe }}
