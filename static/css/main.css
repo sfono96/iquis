@@ -172,3 +172,60 @@ h3 {
     float:left;
     margin-top: -50px;
 }
+
+/* checkbox-to-button
+-----------------------------------------_*/
+
+.slicers {
+    float: left;
+    width: 200px;
+    list-style: none;
+    /*display: block;*/
+    margin: 0 50px 0 -25px;
+}
+
+.slicers li{
+    font-family: arial, helvetica, sans-serif;
+    text-align: center;
+}
+
+div label input {
+   margin-right:100px;
+}
+/*body {
+    font-family:sans-serif;
+}
+*/
+.ck-button {
+    margin:2px;
+    background-color:#EFEFEF;
+    border-radius:4px;
+    border:1px solid #D0D0D0;
+    overflow:auto;
+    float:left;
+}
+
+.ck-button:hover {
+    background:#87CEFA;
+}
+
+.ck-button label {
+    float:left;
+    width:10.0em;
+}
+
+.ck-button label span {
+    text-align:center;
+    padding:3px 0px;
+    display:block;
+}
+
+.ck-button label input {
+    position:absolute;
+    top:-20px;
+}
+
+.ck-button input:checked + span {
+    background:#2f8be8;
+    color:#fff;
+}
