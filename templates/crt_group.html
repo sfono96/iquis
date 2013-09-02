@@ -22,7 +22,7 @@
 				{% endif %}
 			{% endfor %}
 		</ul>
-	<div style="clear:both;"></div>
+	<!-- <div style="clear:both;"></div>
 		<h3>CRT Score Groups</h3>
 		<ul class="slicers">
 			{% for c in crt_groups %}
@@ -32,13 +32,13 @@
 					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="c-{{c}}"><span>{{c}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
-		</ul>
+		</ul> -->
 	<div style="clear:both;"></div>
-	<input type="submit" id="update" value="Update Chart" style="width: 155px; margin: 20px 0 0 35px; height: 50px;" />
+	<input type="submit" id="update" value="Update Chart" style="width: 155px; margin: 20px 0 0 20px; height: 50px;" />
 	</div>
 </form>
 
-<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin-top: 5px;"></div>
+<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin-top: 5px; float: none;"></div>
 	<script>
 		var chart_id = {{ chartID|safe }}
 		var series = {{ series|safe }}

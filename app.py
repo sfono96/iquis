@@ -33,16 +33,40 @@ def split_out_grade(list):
 	return crt_group_list, grade_list
 
 # method to filter on CRT level and show all grades
-def grade_by_crt(grade_list, crt_list):
-	# grade is the series filter crt is a data filter
+# def grade_by_crt(grade_list, crt_list):
+# 	# grade is the series filter crt is a data filter
+# 	mydict = {}
+# 	for row in mylist:
+# 		if row['grade'] in grade_list and row['CRT Score Group'] in crt_list:
+# 			if row['grade'] not in mydict:
+# 				mydict[row['grade']] = {}
+# 			if row['week'] not in mydict[row['grade']]:
+# 				mydict[row['grade']][row['week']] = []
+# 			mydict[row['grade']][row['week']].append(float(row['score']))
+	
+# 	data_series = []
+# 	for i in mydict:
+# 		for j in mydict[i]:
+# 			mydict[i][j] = average(mydict[i][j])
+# 		grade_dict = {}
+# 		grade_dict['name'] = i
+# 		grade_dict['data'] = [(j, mydict[i][j]) for j in mydict[i]] # throw tuples into list so i can sort by assessment then ditch assessments and keep only score
+# 		grade_dict['data'] = sorted(grade_dict['data'])
+# 		grade_dict['data'] = [l[1] for l in grade_dict['data']]
+# 		data_series.append(grade_dict)
+
+# 	data_series = sorted(data_series, key=lambda k: k['name']) 
+# 	return data_series
+
+# display series = grade level and metric is average score across all assessments for each week
+def grade_by_week():
 	mydict = {}
 	for row in mylist:
-		if row['grade'] in grade_list and row['CRT Score Group'] in crt_list:
-			if row['grade'] not in mydict:
-				mydict[row['grade']] = {}
-			if row['week'] not in mydict[row['grade']]:
-				mydict[row['grade']][row['week']] = []
-			mydict[row['grade']][row['week']].append(float(row['score']))
+		if row['grade'] not in mydict:
+			mydict[row['grade']] = {}
+		if row['week'] not in mydict[row['grade']]:
+			mydict[row['grade']][row['week']] = []
+		mydict[row['grade']][row['week']].append(float(row['score']))
 	
 	data_series = []
 	for i in mydict:
@@ -57,6 +81,7 @@ def grade_by_crt(grade_list, crt_list):
 
 	data_series = sorted(data_series, key=lambda k: k['name']) 
 	return data_series
+
 
 def crt_by_grade(crt_list,grade_list):
 	# crt is the series filter grade is a data filter
@@ -148,19 +173,30 @@ app = Flask(__name__)
 ##################### routes #####################
 
 # by grade with crt group slicers
+# @app.route('/')
+# @app.route('/grade', methods=['POST','GET'])
+# def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, f_crt_groups=crt_groups, f_grades=grades):	
+# 	if request.method == 'POST':
+# 		f_crt_groups = split_out_grade(request.form.getlist("ck"))[0]
+# 		f_grades = split_out_grade(request.form.getlist("ck"))[1]
+# 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height}
+# 	series = grade_by_crt(f_grades,f_crt_groups)
+# 	title_text = 'Weekly Assessment Tracking - By Grade'
+# 	title = {"text": title_text} 
+# 	xAxis = {"categories": weeks, "title":{"text":'Week'}}
+# 	yAxis = {"title": {"text": 'Score %'}}
+# 	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, crt_groups=crt_groups,grades=grades, f_crt_groups=f_crt_groups, f_grades=f_grades)
+
 @app.route('/')
-@app.route('/grade', methods=['POST','GET'])
-def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500, f_crt_groups=crt_groups, f_grades=grades):	
-	if request.method == 'POST':
-		f_crt_groups = split_out_grade(request.form.getlist("ck"))[0]
-		f_grades = split_out_grade(request.form.getlist("ck"))[1]
+@app.route('/grade')
+def grade(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):	
 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height}
-	series = grade_by_crt(f_grades,f_crt_groups)
+	series = grade_by_week()
 	title_text = 'Weekly Assessment Tracking - By Grade'
 	title = {"text": title_text} 
 	xAxis = {"categories": weeks, "title":{"text":'Week'}}
 	yAxis = {"title": {"text": 'Score %'}}
-	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, crt_groups=crt_groups,grades=grades, f_crt_groups=f_crt_groups, f_grades=f_grades)
+	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
 
 # by crt group with grade slicer
 @app.route('/crt_group', methods=['POST','GET'])
