@@ -60,7 +60,7 @@ body{
 .actions, .chart {
     margin: 15px auto;
     width: 34px;
-    float: none;
+    float: left;
     margin-top: -50px;
 }
 
