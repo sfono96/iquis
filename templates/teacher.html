@@ -15,10 +15,10 @@
 		<h3>Grade Level</h3>
 		<ul class="slicers">
 			{% for g in grades %}
-				{% if g in f_grades %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="g-{{g}}" checked><span>{{g[4:]}}</span></label></div></li> 
+				{% if g == f_grade %}
+					<li><div class="ck-button"><label><input type="radio" name="r" value="{{g}}" checked><span>{{g[4:]}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="g-{{g}}"><span>{{g[4:]}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="radio" name="r" value="{{g}}"><span>{{g[4:]}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
@@ -27,9 +27,9 @@
 		<ul class="slicers">
 			{% for c in crt_groups %}
 				{% if c in f_crt_groups %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="c-{{c}}" checked><span>{{c}}</span></label></div></li> 
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{c}}" checked><span>{{c}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="c-{{c}}"><span>{{c}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{c}}"><span>{{c}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>

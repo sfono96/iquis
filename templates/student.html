@@ -10,40 +10,44 @@
 
 <br><br><br>
 
-<div id="selectors_shell">
-	<h3>Grades</h3>
-	<ul class="selectors">
-	{% for g in grades %}
-		{% if g == grade %}
-			<li><a href="/students/{{g}}/Mr. Sternberg/all"><div class="current_buttons">{{g[4:]}}</div></a></li>
-		{% else %}
-			<li><a href="/students/{{g}}/Mr. Sternberg/all"><div class="select_buttons">{{g[4:]}}</div></a></li>
-		{% endif %}
-	{% endfor %}
-	</ul>
+<form name="update" action="/students" method="POST">
+	<div id="selectors_shell">	
+		<h3>Grade Level</h3>
+		<ul class="smaller-slicers">
+			{% for g in grades %}
+				{% if g == f_grade %}
+					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()"checked><span>{{g[4:]}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()"><span>{{g[4:]}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
 	<div style="clear:both;"></div>
-	<ul class="selectors">
-	<h3>Teachers</h3>
-	{% for t in teachers %}
-		{% if t == teacher %}
-			<li><a href="/students/0 - Kindergarten/{{t}}/all"><div class="current_buttons">{{t}}</div></a></li>
-		{% else %}
-			<li><a href="/students/0 - Kindergarten/{{t}}/all"><div class="select_buttons">{{t}}</div></a></li>
-		{% endif %}
-	{% endfor %}
-	</ul>
+		<h3>Teachers</h3>
+		<ul class="smaller-slicers">
+			{% for t in teachers %}
+				{% if t == f_teacher %}
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{t}}" checked><span>{{t}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{t}}"><span>{{t}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
 	<div style="clear:both;"></div>
-	<ul class="selectors">
-	<h3>CRT Groups</h3>
-	{% for c in crt_groups %}
-		{% if c == crt_group %}
-			<li><a href="/students/0 - Kindergarten/Mr. Sternberg/{{c}}"><div class="current_buttons">{{c}}</div></a></li>
-		{% else %}
-			<li><a href="/students/0 - Kindergarten/Mr. Sternberg/{{c}}"><div class="select_buttons">{{c}}</div></a></li>
-		{% endif %}
-	{% endfor %}
-	</ul>
-</div>
+		<h3>CRT Score Groups</h3>
+		<ul class="smaller-slicers">
+			{% for c in crt_groups %}
+				{% if c in f_crt_groups %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{c}}" checked><span>{{c}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{c}}"><span>{{c}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	<div style="clear:both;"></div>
+	<input type="submit" id="update" value="Update Chart" style="width: 155px; margin: 10px 0 0 20px; height: 50px;" />
+	</div>
+</form>
 
 <div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin: 5px;"></div>
 	<script>
