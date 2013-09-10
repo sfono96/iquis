@@ -4,6 +4,8 @@ $(document).ready(function() {
 		title: title,
 		xAxis: xAxis,
 		yAxis: yAxis,
-		series: series
+		series: series,
+		plotOptions: plotOptions,
+		// legend: legend,
 	});
 });

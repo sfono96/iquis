@@ -13,28 +13,40 @@
 <form name="update" action="/teachers" method="POST">
 	<div id="selectors_shell">	
 		<h3>Grade Level</h3>
-		<ul class="slicers">
+		<ul class="smaller-slicers">
 			{% for g in grades %}
 				{% if g == f_grade %}
-					<li><div class="ck-button"><label><input type="radio" name="r" value="{{g}}" checked><span>{{g[4:]}}</span></label></div></li> 
+					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()" checked><span>{{g[4:]}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="radio" name="r" value="{{g}}"><span>{{g[4:]}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()"><span>{{g[4:]}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-		<h3>CRT Score Groups</h3>
-		<ul class="slicers">
-			{% for c in crt_groups %}
-				{% if c in f_crt_groups %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{c}}" checked><span>{{c}}</span></label></div></li> 
+		<h3>Quiz</h3>
+		<ul class="smaller-slicers">
+			{% for q in quizzes %}
+				{% if q == f_quiz %}
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{q}}" checked><span>{{q}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{c}}"><span>{{c}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{q}}"><span>{{q}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+
+	<div style="clear:both;"></div>
+		<h3>Proficiency</h3>
+		<ul class="smaller-slicers">
+			{% for p in proficiency_list %}
+				{% if p in f_proficiency_list %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}" checked><span>{{p}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}"><span>{{p}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-	<input type="submit" id="update" value="Update Chart" style="width: 155px; margin: 20px 0 0 20px; height: 50px;" />
+	<input type="submit" id="update" value="Update Chart" style="width: 115px; margin: 10px 0 0 20px; height: 30px;" />
 	</div>
 </form>
 
@@ -45,7 +57,9 @@
 		var title = {{ title|safe }}
 		var xAxis = {{ xAxis|safe }}
 		var yAxis = {{ yAxis|safe }}
+		var plotOptions = {{plotOptions|safe}}
 		var chart = {{ chart|safe }}
+
 	</script>
 			
 {% endblock %}	

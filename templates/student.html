@@ -34,13 +34,13 @@
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-		<h3>CRT Score Groups</h3>
+		<h3>Proficiency</h3>
 		<ul class="smaller-slicers">
-			{% for c in crt_groups %}
-				{% if c in f_crt_groups %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{c}}" checked><span>{{c}}</span></label></div></li> 
+			{% for p in proficiency_list %}
+				{% if p in f_proficiency_list %}
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}" checked><span>{{p}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{c}}"><span>{{c}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}"><span>{{p}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
@@ -49,14 +49,43 @@
 	</div>
 </form>
 
-<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 1000px; margin: 5px;"></div>
-	<script>
-		var chart_id = {{ chartID|safe }}
-		var series = {{ series|safe }}
-		var title = {{ title|safe }}
-		var xAxis = {{ xAxis|safe }}
-		var yAxis = {{ yAxis|safe }}
-		var chart = {{ chart|safe }}
-	</script>
+<!-- Row Highlight Javascript -->
+<script type="text/javascript">
+	window.onload=function(){
+	var tfrow = document.getElementById('tfhover').rows.length;
+	var tbRow=[];
+	for (var i=1;i<tfrow;i++) {
+		tbRow[i]=document.getElementById('tfhover').rows[i];
+		tbRow[i].onmouseover = function(){
+		  this.style.backgroundColor = '#ffffff';
+		};
+		tbRow[i].onmouseout = function() {
+		  this.style.backgroundColor = '#d4e3e5';
+		};
+	}
+};
+</script>
+
+<style type="text/css">
+table.tftable {font-size:12px;color:#333333;width:1000px%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
+table.tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
+table.tftable tr {background-color:#d4e3e5;}
+table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
+</style>
+
+<table id="tfhover" class="tftable" border="1">
+
+	<tr><th>Student</th>
+		{% for q in quizzes %}
+			<th>{{q}}</th>
+		{% endfor %}	
+	</tr>
+
+	{% for st in students %}
+		<tr><td>{{st[0]}}</td><td>{{st[1]}}</td><td>{{st[2]}}</td><td>{{st[3]}}</td><td>{{st[4]}}</td><td>{{st[5]}}</td><td>{{st[6]}}</td></tr>
+	{% endfor %}
+
+</table>
+
 			
 {% endblock %}	
