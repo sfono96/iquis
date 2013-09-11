@@ -12,7 +12,7 @@
 
 <form name="update" action="/teachers" method="POST">
 	<div id="selectors_shell">	
-		<h3>Grade Level</h3>
+		<h2>Grade Level</h2>
 		<ul class="smaller-slicers">
 			{% for g in grades %}
 				{% if g == f_grade %}
@@ -23,30 +23,29 @@
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-		<h3>Quiz</h3>
+		<h2>Assessment</h2>
 		<ul class="smaller-slicers">
 			{% for q in quizzes %}
 				{% if q == f_quiz %}
-					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{q}}" checked><span>{{q}}</span></label></div></li> 
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{q}}" onClick="this.form.submit()" checked><span>{{q}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{q}}"><span>{{q}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{q}}" onClick="this.form.submit()"><span>{{q}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
 
 	<div style="clear:both;"></div>
-		<h3>Proficiency</h3>
+		<h2>Prior Year Proficiency</h2>
 		<ul class="smaller-slicers">
 			{% for p in proficiency_list %}
-				{% if p in f_proficiency_list %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}" checked><span>{{p}}</span></label></div></li> 
+				{% if p == f_proficiency_list %}
+					<li><div class="ck-button"><label><input type="radio" name="r3" value="{{p}}" onClick="this.form.submit()" checked><span>{{p}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}"><span>{{p}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="radio" name="r3" value="{{p}}" onClick="this.form.submit()"><span>{{p}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-	<input type="submit" id="update" value="Update Chart" style="width: 115px; margin: 10px 0 0 20px; height: 30px;" />
 	</div>
 </form>
 
@@ -58,6 +57,7 @@
 		var xAxis = {{ xAxis|safe }}
 		var yAxis = {{ yAxis|safe }}
 		var plotOptions = {{plotOptions|safe}}
+		var tooltip = {{ tooltip|safe}}
 		var chart = {{ chart|safe }}
 
 	</script>

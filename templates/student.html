@@ -12,65 +12,47 @@
 
 <form name="update" action="/students" method="POST">
 	<div id="selectors_shell">	
-		<h3>Grade Level</h3>
+		<h2>Grade Level</h2>
 		<ul class="smaller-slicers">
 			{% for g in grades %}
 				{% if g == f_grade %}
-					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()"checked><span>{{g[4:]}}</span></label></div></li> 
+					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()" checked><span>{{g[4:]}}</span></label></div></li> 
 				{% else %}
 					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()"><span>{{g[4:]}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-		<h3>Teachers</h3>
+		<h2>Teachers</h2>
 		<ul class="smaller-slicers">
 			{% for t in teachers %}
 				{% if t == f_teacher %}
-					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{t}}" checked><span>{{t}}</span></label></div></li> 
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{t}}" onClick="this.form.submit()" checked><span>{{t}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{t}}"><span>{{t}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{t}}" onClick="this.form.submit()"><span>{{t}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-		<h3>Proficiency</h3>
+		<h2>Prior Year Proficiency</h2>
 		<ul class="smaller-slicers">
 			{% for p in proficiency_list %}
-				{% if p in f_proficiency_list %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}" checked><span>{{p}}</span></label></div></li> 
+				{% if p == f_proficiency_list %}
+					<li><div class="ck-button"><label><input type="radio" name="r3" value="{{p}}" onClick="this.form.submit()" checked><span>{{p}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}"><span>{{p}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="radio" name="r3" value="{{p}}" onClick="this.form.submit()"><span>{{p}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-	<input type="submit" id="update" value="Update Chart" style="width: 115px; margin: 10px 0 0 20px; height: 30px;" />
 	</div>
 </form>
 
-<!-- Row Highlight Javascript -->
-<script type="text/javascript">
-	window.onload=function(){
-	var tfrow = document.getElementById('tfhover').rows.length;
-	var tbRow=[];
-	for (var i=1;i<tfrow;i++) {
-		tbRow[i]=document.getElementById('tfhover').rows[i];
-		tbRow[i].onmouseover = function(){
-		  this.style.backgroundColor = '#ffffff';
-		};
-		tbRow[i].onmouseout = function() {
-		  this.style.backgroundColor = '#d4e3e5';
-		};
-	}
-};
-</script>
-
 <style type="text/css">
-table.tftable {font-size:12px;color:#333333;width:1000px%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
-table.tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
-table.tftable tr {background-color:#d4e3e5;}
-table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
+	table.tftable {font-family: arial, helvetica, sans-serif; font-size:12px;color:#333333;width:1000px;border-width: 1px;border-color: #000000;border-collapse: collapse;}
+	table.tftable th {font-size:12px;background-color:#d3d3d3;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;text-align:left;}
+	table.tftable tr {background-color:#efefef;}
+	table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;}
 </style>
 
 <table id="tfhover" class="tftable" border="1">
@@ -82,8 +64,21 @@ table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: so
 	</tr>
 
 	{% for st in students %}
-		<tr><td>{{st[0]}}</td><td>{{st[1]}}</td><td>{{st[2]}}</td><td>{{st[3]}}</td><td>{{st[4]}}</td><td>{{st[5]}}</td><td>{{st[6]}}</td></tr>
+		<tr>
+		{% for i in range(qcnt+1) %}
+			{% if i == 0 %}	
+				<td>{{st[i]}}</td>
+			{% elif st[i] < 20 %}
+				<td style="background-color: red; color: white; font-weight: bold;">{{st[i]}}</td>
+			{% elif st[i] >= 20 and st[i] < 30 %}
+				<td style="background-color: yellow; font-weight: bold;">{{st[i]}}</td>
+			{% else %}
+				<td style="background-color: #32CD32; font-weight: bold;">{{st[i]}}</td>
+			{% endif %}
+		{% endfor %}
+		</tr>
 	{% endfor %}
+
 
 </table>
 

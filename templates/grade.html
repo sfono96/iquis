@@ -16,13 +16,13 @@
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-		<h3>Proficiency</h3>
+		<h3>Prior Year Proficiency</h3>
 		<ul class="slicers">
 			{% for p in proficiency_list %}
-				{% if p in f_proficiency_list %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}" checked><span>{{p}}</span></label></div></li> 
+				{% if p == f_proficiency_list %}
+					<li><div class="ck-button"><label><input type="radio" name="rb2" value="{{p}}" onClick="this.form.submit()" checked><span>{{p}}</span></label></div></li> 
 				{% else %}
-					<li><div class="ck-button"><label><input type="checkbox" name="ck" value="{{p}}"><span>{{p}}</span></label></div></li>
+					<li><div class="ck-button"><label><input type="radio" name="rb2" value="{{p}}" onClick="this.form.submit()"><span>{{p}}</span></label></div></li>
 				{% endif %}
 			{% endfor %}
 		</ul>
@@ -36,6 +36,7 @@
 	var xAxis = {{ xAxis|safe }}
 	var yAxis = {{ yAxis|safe }}
 	var plotOptions = {{ plotOptions|safe }}
+	var tooltip = {{ tooltip|safe }}
 	var chart = {{ chart|safe }}
 </script>
 

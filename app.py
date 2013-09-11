@@ -12,7 +12,8 @@ teachers = sorted(set([row['teacher'] for row in mylist]))
 grades = sorted(set([row['grade'] for row in mylist]))
 crt_groups = sorted(set([row['CRT Score Group'] for row in mylist]))
 assessments = sorted(set([row['standard'] for row in mylist]))
-proficiency_groups = sorted(set([row['proficiency'] for row in mylist]))	
+proficiency_groups = sorted(set([row['proficiency'] for row in mylist]))
+proficiency_groups.append('All')
 #weeks = sorted(set([row['week'] for row in mylist]))
 
 # average formula takes a list of numbers and returns the average
@@ -44,10 +45,11 @@ def relevant_quiz(grade):
 def quiz(grade,proficiency_list):
 	mydict = {}
 	for row in mylist:
-		if row['grade'] == grade and row['proficiency'] in proficiency_list:
-			if row['standard'] not in mydict:
-				mydict[row['standard']] = []
-			mydict[row['standard']].append(float(row['score']))
+		if row['grade'] == grade:
+			if proficiency_list == 'All' or row['proficiency'] == proficiency_list:
+				if row['standard'] not in mydict:
+					mydict[row['standard']] = []
+				mydict[row['standard']].append(float(row['score']))
 	
 	data = []
 	for i in mydict:
@@ -65,10 +67,11 @@ def quiz(grade,proficiency_list):
 def teacher(grade,proficiency_list,quiz):
 	mydict = {}
 	for row in mylist:
-		if row['grade'] == grade and row['proficiency'] in proficiency_list and row['standard'] == quiz:
-			if row['teacher'] not in mydict:
-				mydict[row['teacher']] = []
-			mydict[row['teacher']].append(float(row['score']))
+		if row['grade'] == grade and row['standard'] == quiz: 
+			if row['proficiency'] == proficiency_list or proficiency_list == 'All':
+				if row['teacher'] not in mydict:
+					mydict[row['teacher']] = []
+				mydict[row['teacher']].append(float(row['score']))
 	
 	data = []
 	for i in mydict:
@@ -88,12 +91,13 @@ def students_list(grade,teacher,proficiency_list):
 	student_dict = {}
 	quizzes = relevant_quiz(grade)
 	for row in mylist:
-		if row['grade'] == grade and row['teacher'] == teacher and row['proficiency'] in proficiency_list: # if it is the target grade and teacher
-			if row['name'] not in student_dict:
-				student_dict[row['name']] = []
-			for q in quizzes:
-				if row['standard'] == q:
-					student_dict[row['name']].append(round_me(row['score'])*100)
+		if row['grade'] == grade and row['teacher'] == teacher: 
+			if row['proficiency'] == proficiency_list or proficiency_list == 'All': # if it is the target grade and teacher
+				if row['name'] not in student_dict:
+					student_dict[row['name']] = []
+				for q in quizzes:
+					if row['standard'] == q:
+						student_dict[row['name']].append(round_me(row['score'])*100)
 	
 	data_series = []
 	for k in student_dict:
@@ -135,46 +139,49 @@ def logout():
 # filter quizzes by grade level
 @app.route('/')
 @app.route('/grade',methods=['GET','POST'])
-def grade(chartID = 'chart_ID', chart_type = 'bar', chart_height = 500, f_grade = '0 - Kindergarten', f_proficiency_list = proficiency_groups):
+def grade(chartID = 'chart_ID', chart_type = 'bar', chart_height = 500, f_grade = '0 - Kindergarten', f_proficiency_list = 'All'):
 	if request.method == 'POST':
 		f_grade = request.form.getlist("rb")[0]
-		f_proficiency_list = request.form.getlist("ck")
+		f_proficiency_list = request.form.getlist("rb2")[0]
 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height}
 	series = [quiz(f_grade,f_proficiency_list)] #quiz(grade,proficiency_list)
-	title_text = 'Quiz Tracking - %s' % str(f_grade[4:])
+	title_text = 'Math Assessment Tracking - %srs' % str(f_grade[4:])
 	title = {"text": title_text} 
 	xAxis = {"categories":relevant_quiz(f_grade)}
 	yAxis = {"min":20,"max":50,"title": {"text": 'Score %'}}
-	plotOptions = {"series":{"dataLabels":{"enabled":"true","format":'{y} pct',"style":{"fontWeight":'bold',"fontSize":'15px'}}}}
-	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, plotOptions=plotOptions, grades=grades, \
+	#plotOptions = {"series":{"dataLabels":{"enabled":"true","format":'{y} pct',"style":{"fontWeight":'bold',"fontSize":'15px'}}}}
+	plotOptions = {"series":{"colorByPoint":"true"}}
+	tooltip = {"valueSuffix":' pct'}
+	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, plotOptions=plotOptions, tooltip=tooltip,grades=grades, \
 	proficiency_list=proficiency_groups, f_grade=f_grade,f_proficiency_list=f_proficiency_list)
 
 # by teacher with grade and crt group filters
 @app.route('/teachers',methods=['POST','GET'])
-def teachers(chartID = 'chart_ID', chart_type = 'column', chart_height = 500, f_grade='0 - Kindergarten', f_proficiency_list=proficiency_groups):	
+def teachers(chartID = 'chart_ID', chart_type = 'column', chart_height = 500, f_grade='0 - Kindergarten', f_proficiency_list='All'):	
 	f_quiz = relevant_quiz(f_grade)[0]
 	if request.method == 'POST':
-		f_proficiency_list = request.form.getlist("ck")
+		f_proficiency_list = request.form.getlist("r3")[0]
 		f_grade = request.form.getlist("r1")[0]
 		f_quiz = request.form.getlist("r2")[0]
 		if f_quiz not in relevant_quiz(f_grade):
 			f_quiz = relevant_quiz(f_grade)[0]
 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height}
 	series = [teacher(f_grade,f_proficiency_list,f_quiz)] 
-	title_text = 'Quiz Tracking - %s Teachers' % str(f_grade[4:])
+	title_text = 'Math Assessment Tracking - %s Teachers' % str(f_grade[4:])
 	title = {"text": title_text} 
 	xAxis = {"categories": relevant_teachers(f_grade)}
 	yAxis = {"min":0,"max":50,"title": {"text": 'Score %'}}
 	plotOptions = {"series":{"colorByPoint":"true","dataLabels":{"enabled":"true","format":'{y} pct',"inside":"true","color":"white","style":{"fontWeight":'bold',"fontSize":'20px'}}}}
-	return render_template('teacher.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, plotOptions=plotOptions, grades=grades, \
+	tooltip = {"valueSuffix":" pct"}
+	return render_template('teacher.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, plotOptions=plotOptions, tooltip=tooltip,grades=grades, \
 	proficiency_list=proficiency_groups, quizzes = relevant_quiz(f_grade), f_grade=f_grade, f_proficiency_list=f_proficiency_list,f_quiz=f_quiz)
 
 # by students with grade, teacher, and crt group filters
 @app.route('/students',methods=['POST','GET'])
-def students(f_grade = '0 - Kindergarten', f_teacher = 'Mr. Sternberg', f_proficiency_list=proficiency_groups):	
+def students(f_grade = '0 - Kindergarten', f_teacher = 'Mr. Sternberg', f_proficiency_list='All'):	
 	if request.method == 'POST':
 		f_grade = request.form.getlist("r1")[0]
-		f_proficiency_list = request.form.getlist("ck")
+		f_proficiency_list = request.form.getlist("r3")[0]
 		f_teacher = request.form.getlist("r2")[0]
 		if f_teacher not in relevant_teachers(f_grade):
 			f_teacher = relevant_teachers(f_grade)[0]

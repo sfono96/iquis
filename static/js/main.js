@@ -6,6 +6,7 @@ $(document).ready(function() {
 		yAxis: yAxis,
 		series: series,
 		plotOptions: plotOptions,
+		tooltip: tooltip,
 		// legend: legend,
 	});
 });

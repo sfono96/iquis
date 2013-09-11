@@ -77,6 +77,15 @@ h3 {
     margin-left: 15px;
 }
 
+h2 {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    color: #484848;
+    margin: 15px 0 15px 15px;
+}
+
 
 #selectors_shell{
     float: left;
