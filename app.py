@@ -31,12 +31,6 @@ def round_me(number):
 def relevant_teachers(grade):
 	return sorted(set([row['teacher'] for row in mylist if row['grade'] == grade]))
 
-# split out the checkbox values
-def split_out_grade(list):
-	crt_group_list = [i[2:] for i in list if i[0] == 'c']
-	grade_list = [i[2:] for i in list if i[0] == 'g']
-	return crt_group_list, grade_list
-
 def relevant_quiz(grade):
 	list = sorted(set([q['standard'] for q in mylist if q['grade'] == grade]))
 	return list

@@ -12,7 +12,7 @@
 
 <form name="update" action="/teachers" method="POST">
 	<div id="selectors_shell">	
-		<h2>Grade Level</h2>
+		<div id="sm">Grade Level</div>
 		<ul class="smaller-slicers">
 			{% for g in grades %}
 				{% if g == f_grade %}
@@ -23,7 +23,7 @@
 			{% endfor %}
 		</ul>
 	<div style="clear:both;"></div>
-		<h2>Assessment</h2>
+		<div id="sm">Assessment</div>
 		<ul class="smaller-slicers">
 			{% for q in quizzes %}
 				{% if q == f_quiz %}
@@ -35,7 +35,7 @@
 		</ul>
 
 	<div style="clear:both;"></div>
-		<h2>Prior Year Proficiency</h2>
+		<div id="sm">Prior Year Proficiency</div>
 		<ul class="smaller-slicers">
 			{% for p in proficiency_list %}
 				{% if p == f_proficiency_list %}
