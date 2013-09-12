@@ -163,10 +163,10 @@ def teachers(chartID = 'chart_ID', chart_type = 'column', chart_height = 500, f_
 	series = [teacher(f_grade,f_proficiency_list,f_quiz)] 
 	title_text = 'Math Assessment Tracking - %s Teachers' % str(f_grade[4:])
 	title = {"text": title_text} 
-	xAxis = {"categories": relevant_teachers(f_grade)}
+	xAxis = {"categories": relevant_teachers(f_grade),"labels":{"style":{"font-size":"16px","fontWeight":'bold'}}}
 	yAxis = {"min":0,"max":50,"title": {"text": 'Score %'}}
 	plotOptions = {"series":{"colorByPoint":"true","dataLabels":{"enabled":"true","format":'{y} pct',"inside":"true","color":"white","style":{"fontWeight":'bold',"fontSize":'20px'}}}}
-	tooltip = {"valueSuffix":" pct"}
+	tooltip = {"valueSuffix":' pct'}
 	return render_template('teacher.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, plotOptions=plotOptions, tooltip=tooltip,grades=grades, \
 	proficiency_list=proficiency_groups, quizzes = relevant_quiz(f_grade), f_grade=f_grade, f_proficiency_list=f_proficiency_list,f_quiz=f_quiz)
 
