@@ -40,7 +40,7 @@
 		<h3>Prior Year Proficiency</h3>
 		<ul class="smaller-slicers">
 			{% for p in proficiency_list %}
-				{% if p == f_proficiency_list %}
+				{% if p == f_proficiency %}
 					<li><div class="ck-button"><label><input type="radio" name="r3" value="{{p}}" onClick="this.form.submit()" checked><span>{{p}}</span></label></div></li> 
 				{% else %}
 					<li><div class="ck-button"><label><input type="radio" name="r3" value="{{p}}" onClick="this.form.submit()"><span>{{p}}</span></label></div></li>
