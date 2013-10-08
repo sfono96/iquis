@@ -1,0 +1,110 @@
+{% extends 'base.html' %}		
+
+{% block for %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="/static/js/main.js"></script>
+<script src="/static/js/jquery-latest.js"></script>
+<script src="/static/js/jquery.tablesorter.js"></script>
+<!-- <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
+
+<br><br><br>
+
+<form name="update" action="/attempts" method="POST">
+	<div id="selectors_shell">	
+		<h1>Grade Level</h1>
+		<ul class="even-smaller-slicers">
+			{% for g in grades %}
+				{% if g == f_grade %}
+					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()" checked><span>{{g[4:]}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="radio" name="r1" value="{{g}}" onClick="this.form.submit()"><span>{{g[4:]}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	<div style="clear:both;"></div>
+		<h1>Teachers</h1>
+		<ul class="even-smaller-slicers">
+			{% for t in teachers %}
+				{% if t == f_teacher %}
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{t}}" onClick="this.form.submit()" checked><span>{{t}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="radio" name="r2" value="{{t}}" onClick="this.form.submit()"><span>{{t}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	<div style="clear:both;"></div>
+		<h1>Prior Year Proficiency</h1>
+		<ul class="even-smaller-slicers">
+			{% for p in proficiency_list %}
+				{% if p == f_proficiency %}
+					<li><div class="ck-button"><label><input type="radio" name="r3" value="{{p}}" onClick="this.form.submit()" checked><span>{{p}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="radio" name="r3" value="{{p}}" onClick="this.form.submit()"><span>{{p}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	<!--<div style="clear:both;"></div>-->
+		<h1>Assessment</h1>
+		<ul class="even-smaller-slicers">
+			{% for q in quizzes %}
+				{% if q == f_quiz %}
+					<li><div class="ck-button"><label><input type="radio" name="r4" value="{{q}}" onClick="this.form.submit()" checked><span>{{q}}</span></label></div></li> 
+				{% else %}
+					<li><div class="ck-button"><label><input type="radio" name="r4" value="{{q}}" onClick="this.form.submit()"><span>{{q}}</span></label></div></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	<!--<div style="clear:both;"></div>-->
+	</div>
+</form>
+
+<style type="text/css">
+	table.sortable {font-family: arial, helvetica, sans-serif; font-size:12px;color:#333333;width:1000px;border-width: 1px;border-color: #000000;border-collapse: collapse;}
+	table.sortable th {font-size:12px;background-color:#d3d3d3;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;text-align:left;}
+	table.sortable tr {background-color:#efefef;}
+	table.sortable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;}
+</style>
+
+<table class="sortable" border="1">
+	<thead>
+		<tr>
+			<th>Student</th>
+			{% for a in range(1,acnt+1) %}
+				<th>Attempt: {{a}}</th>
+			{% endfor %}	
+		</tr>
+	</thead>
+	<tbody>
+		{% for st in students %}
+			<tr>
+			{% for i in range(acnt+1) %}
+				{% if i == 0 %}	
+					<td>{{st[i]}}</td>
+				{% elif st[i] == None %}	
+					<td></td>
+				{% elif st[i] < 20 %}
+					<td style="background-color: red; color: white; font-weight: bold;">{{st[i]}}</td>
+				{% elif st[i] >= 20 and st[i] < 30 %}
+					<td style="background-color: yellow; font-weight: bold;">{{st[i]}}</td>
+				{% else %}
+					<td style="background-color: #32CD32; font-weight: bold;">{{st[i]}}</td>
+				{% endif %}
+			{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<script type="text/javascript">			
+$(document).ready(function() 
+    { 
+        $("table").tablesorter({sortList: [[0,0], [1,0]]}); 
+    } 
+); 
+</script>
+
+{% endblock %}	
