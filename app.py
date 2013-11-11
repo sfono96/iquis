@@ -1,32 +1,50 @@
 from flask import *
 from pgdb import *
+from functools import wraps
 
 ##################### app #####################
 
 app = Flask(__name__)
 app.jinja_env.add_extension('jinja2.ext.loopcontrols') # add counter looping
+app.secret_key = '5RD{Hd1CRSwCoqct4Y497&4Ar12t5V'
+
+# login decorator
+def login_required(test):
+	@wraps(test)
+	def wrap(*args, **kwargs):
+		if 'logged_in' in session:
+			return test(*args, **kwargs)
+		else:
+			flash('You need to login first dude.')
+			return redirect(url_for('log'))
+	return wrap
 
 ##################### routes #####################
-
-# login stuff
-@app.route('/log',methods=['GET','POST'])
-def log():
-	error = None
-	if request.method == 'POST':
-		if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-			error = 'Invalid Credentials. Please try again.'
-		else:
-			session['logged_in'] = True
-			return redirect(url_for('/'))
-	return render_template('log.html',error=error)
 
 # logout session
 @app.route('/logout')
 def logout():
 	session.pop('logged_in', None)
+	flash('You were logged out')
+	return redirect(url_for('log'))
+
+# login
+@app.route('/log',methods=['GET','POST'])
+def log():
+	error = None
+	if request.method == 'POST':
+		if request.form['uid'] != 'admin' or request.form['pwd'] != 'admin':
+			error = 'Invalid Credentials. Please try again.'
+			flash(error)
+			return redirect(url_for('log'))
+		else:
+			session['logged_in'] = True
+			return redirect(url_for('grade'))
+	return render_template('log.html',error=error)
 
 # filter quizzes by grade level
 @app.route('/')
+@login_required
 @app.route('/grade',methods=['GET','POST'])
 def grade(chartID = 'chart_ID', chart_type = 'bar', chart_height = 500, f_grade = '0 - Kindergarten', f_proficiency = 'All'):
 	if request.method == 'POST':
@@ -46,6 +64,7 @@ def grade(chartID = 'chart_ID', chart_type = 'bar', chart_height = 500, f_grade 
 
 # by teacher with grade and crt group filters
 @app.route('/teachers',methods=['POST','GET'])
+@login_required
 def teachers(chartID = 'chart_ID', chart_type = 'column', chart_height = 500, f_grade='0 - Kindergarten', f_proficiency='All'):	
 	f_quiz = relevant_quiz(f_grade)[0]
 	if request.method == 'POST':
@@ -67,6 +86,7 @@ def teachers(chartID = 'chart_ID', chart_type = 'column', chart_height = 500, f_
 
 # by students with grade, teacher, and crt group filters
 @app.route('/students',methods=['POST','GET'])
+@login_required
 def students(f_grade = '0 - Kindergarten', f_teacher = 'Mr. Sternberg', f_proficiency='All'):	
 	if request.method == 'POST':
 		f_grade = request.form.getlist("r1")[0]
@@ -80,6 +100,7 @@ def students(f_grade = '0 - Kindergarten', f_teacher = 'Mr. Sternberg', f_profic
 
 # by students with grade, teacher, and crt group filters
 @app.route('/attempts',methods=['POST','GET'])
+@login_required
 def retakes(f_grade = '0 - Kindergarten', f_teacher = 'Mr. Sternberg', f_proficiency='All'):	
 	f_quiz = relevant_quiz(f_grade)[0]
 	if request.method == 'POST':

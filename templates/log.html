@@ -4,7 +4,7 @@
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 
-		<title>iNQUIS | login</title>
+		<title>Pony Express Elem | login</title>
 		
 		<link href="/static/css/main.css" rel="stylesheet" type="text/css" />
 <!-- 		
@@ -18,12 +18,19 @@
 	<!--     <h1 style="font-family:Comic Sans Ms;text-align="center";font-size:20pt;color:#00FF00;">
 	    	Simple Login Page
 	    </h1> -->
-	    <form name="login" style="list-style:none; margin: 150px 0 0 550px;">
-	    	<div id = "navheader">iNQUIS</div>
-	    	<li style="font-family: arial, helveticca, sans serif;">username:<input type="text" name="userid" style="height: 30px; width: 200px; margin: 10px"/></li>
-	    	<li style="font-family: arial, helveticca, sans serif;">password:<input type="password" name="pswrd" style="height: 30px; width: 200px;margin: 10px"/></li>
-		    <li><input type="button" onclick="check(this.form)" value="Login >>" style="margin: 20px; font-family: arial, helveticca, sans serif;"/></li>
+	    <form name="login" action="/log" method="POST" style="list-style:none; margin: 150px 0 0 550px;">
+	    	<div id = "navheader" style="margin:0 0 0 0">Pony Express Tracking</div>
+	    	<li style="font-family: arial, helveticca, sans serif;">username:<input type="text" name="uid" style="height: 30px; width: 200px; margin: 10px"/></li>
+	    	<li style="font-family: arial, helveticca, sans serif;">password:<input type="password" name="pwd" onreturn="this.form.submit()" style="height: 30px; width: 200px;margin: 0 0 0 14px"/></li>
+		    <li><input type="button" onclick="this.form.submit()" value="Login >>" style="margin: 20px 0px 0px 82px; font-family: arial, helveticca, sans serif;"/></li>
+		    <br><br>
+	    	{% for message in get_flashed_messages() %}
+				{{ message }}
+			{% endfor %}
 	    </form>
+
+		
+
     </body>
 </html>
 
