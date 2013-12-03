@@ -57,7 +57,8 @@ def round_me(number):
 def relevant_quiz(grade):
 	sql = 'SELECT DISTINCT ASSESSMENT FROM DATA WHERE GRADE = \'%s\' ORDER BY 1;' % grade
 	cursor.execute(sql)
-	return [r[0] for r in cursor.fetchall()]
+	quizzes = [r[0] for r in cursor.fetchall()]
+	return quizzes
 
 def relevant_teachers(grade):
 	sql = 'SELECT DISTINCT TEACHER FROM DATA WHERE GRADE = \'%s\' ORDER BY 1;' % grade
@@ -76,7 +77,8 @@ def quiz(grade,proficiency):
 	cursor.execute(sql)
 	rs = cursor.fetchall()
 	assessments = [r[0] for r in rs]
-	scores = [round_me(r[1]) for r in rs]
+	#scores = [round_me(r[1]) for r in rs]
+	scores = [float(r[1]) for r in rs]
 	return assessments, scores
 
 
@@ -88,7 +90,8 @@ def teacher(grade,proficiency,quiz):
 	cursor.execute(sql)
 	rs = cursor.fetchall()
 	teachers = [r[0] for r in rs]
-	scores = [round_me(r[1]) for r in rs]
+	#scores = [round_me(r[1]) for r in rs]
+	scores = [float(r[1]) for r in rs]
 	return teachers, scores	
 
 
@@ -103,19 +106,31 @@ def students_list(grade,teacher,proficiency):
 			sql = 'SELECT STUDENT, ASSESSMENT, SCORE FROM DATA WHERE GRADE = \'%s\' AND ATTEMPT = 1 AND PRIOR_YEAR_PROFICIENCY = \'%s\' ORDER BY 1,2;' % (grade,proficiency)
 		else:
 			sql = 'SELECT STUDENT, ASSESSMENT, SCORE FROM DATA WHERE TEACHER = \'%s\' AND ATTEMPT = 1 AND PRIOR_YEAR_PROFICIENCY = \'%s\' ORDER BY 1,2;' % (teacher,proficiency)
+	
+	quizzes = relevant_quiz(grade)
+
 	cursor.execute(sql)
 	rs = cursor.fetchall()
 	data_series = []
 	sdict = {}
 	for r in rs:
 		if r[0] not in sdict:
-			sdict[r[0]] = []
-		sdict[r[0]].append(r[2])
+			sdict[r[0]] = {}
+			for quiz in quizzes:
+				if quiz not in sdict[r[0]]:
+					sdict[r[0]][quiz] = ''
+
+		if r[1] in sdict[r[0]]:
+			sdict[r[0]][r[1]] = float(r[2])
+
 	for k in sdict:
 		list = []
 		list.append(k)
-		for v in sdict[k]:
-			list.append(round_me(v))
+		for q in quizzes:
+			if sdict[k][q] <> '':
+				list.append(float(sdict[k][q]))
+			else:
+				list.append('')
 		data_series.append(list)
 
 	data_series = sorted(data_series)

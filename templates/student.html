@@ -9,6 +9,7 @@
 <script src="/static/js/main.js"></script>
 <script src="/static/js/jquery-latest.js"></script>
 <script src="/static/js/jquery.tablesorter.js"></script>
+<script src="/static/js/jquery.dataTables.js"></script>
 <!-- <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
 
 <br><br><br>
@@ -52,10 +53,19 @@
 </form>
 
 <style type="text/css">
-	table.sortable {font-family: arial, helvetica, sans-serif; font-size:12px;color:#333333;width:1000px;border-width: 1px;border-color: #000000;border-collapse: collapse;}
+	table.sortable {font-family: arial, helvetica, sans-serif; font-size:12px;color:#333333;width:1200px;border-width: 1px;border-color: #000000;border-collapse: collapse;}
 	table.sortable th {font-size:12px;background-color:#d3d3d3;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;text-align:left;}
 	table.sortable tr {background-color:#efefef;}
 	table.sortable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;}
+/*	table {
+		font-family: arial;
+		border-width: 1px;
+		border-color: #000000;
+		border-collapse: collapse;
+		table-layout: fixed;
+		width:1000px;
+		overflow: hidden;
+	}*/
 </style>
 
 <table class="sortable" border="1">
@@ -73,9 +83,11 @@
 			{% for i in range(qcnt+1) %}
 				{% if i == 0 %}	
 					<td>{{st[i]}}</td>
-				{% elif st[i] < 20 %}
+				{% elif st[i] == '' %}
+					<td style="background-color: grey; color: white; font-weight: bold;">{{st[i]}}</td>	
+				{% elif st[i] < 2 %}
 					<td style="background-color: red; color: white; font-weight: bold;">{{st[i]}}</td>
-				{% elif st[i] >= 20 and st[i] < 30 %}
+				{% elif st[i] >= 2 and st[i] < 4 %}
 					<td style="background-color: yellow; font-weight: bold;">{{st[i]}}</td>
 				{% else %}
 					<td style="background-color: #32CD32; font-weight: bold;">{{st[i]}}</td>
@@ -92,6 +104,13 @@ $(document).ready(function()
         $("table").tablesorter({sortList: [[0,0], [1,0]]}); 
     } 
 ); 
+// $(document).ready(function() {
+// 	$('table').dataTable( {
+// 		"sScrollY": "600px",
+// 		"bPaginate": false,
+// 		"bAutoWidth": false
+// 	} );
+// } );
 </script>
 
 {% endblock %}	

@@ -33,7 +33,7 @@ def logout():
 def log():
 	error = None
 	if request.method == 'POST':
-		if request.form['uid'] != 'admin' or request.form['pwd'] != 'admin':
+		if request.form['uid'] != 'admin' or request.form['pwd'] != 'ponytracks':
 			error = 'Invalid Credentials. Please try again.'
 			flash(error)
 			return redirect(url_for('log'))
@@ -46,7 +46,7 @@ def log():
 @app.route('/')
 @login_required
 @app.route('/grade',methods=['GET','POST'])
-def grade(chartID = 'chart_ID', chart_type = 'bar', chart_height = 500, f_grade = '0 - Kindergarten', f_proficiency = 'All'):
+def grade(chartID = 'chart_ID', chart_type = 'bar', chart_height = 500, f_grade = '2 - Second Grade', f_proficiency = 'All'):
 	if request.method == 'POST':
 		f_grade = request.form.getlist("rb")[0]
 		f_proficiency = request.form.getlist("rb2")[0]
@@ -55,17 +55,18 @@ def grade(chartID = 'chart_ID', chart_type = 'bar', chart_height = 500, f_grade 
 	title_text = 'Math Assessment Tracking - %s' % str(f_grade[4:])
 	title = {"text": title_text} 
 	xAxis = {"categories":quiz(f_grade,f_proficiency)[0]}
-	yAxis = {"min":20,"max":50,"title": {"text": 'Score %'}}
+	yAxis = {"min":0,"max":6,"title": {"text": 'Average Score'}}
 	#plotOptions = {"series":{"dataLabels":{"enabled":"true","format":'{y} pct',"style":{"fontWeight":'bold',"fontSize":'15px'}}}}
 	plotOptions = {"series":{"colorByPoint":"true"}}
-	tooltip = {"valueSuffix":' pct',"valueDecimals":1}
+	#tooltip = {"valueSuffix":' pct',"valueDecimals":1}
+	tooltip = {"valueDecimals":2}
 	return render_template('grade.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, plotOptions=plotOptions, tooltip=tooltip,grades=grades, \
 	proficiency_list=proficiency_groups, f_grade=f_grade,f_proficiency=f_proficiency)
 
 # by teacher with grade and crt group filters
 @app.route('/teachers',methods=['POST','GET'])
 @login_required
-def teachers(chartID = 'chart_ID', chart_type = 'column', chart_height = 500, f_grade='0 - Kindergarten', f_proficiency='All'):	
+def teachers(chartID = 'chart_ID', chart_type = 'column', chart_height = 500, f_grade='2 - Second Grade', f_proficiency='All'):	
 	f_quiz = relevant_quiz(f_grade)[0]
 	if request.method == 'POST':
 		f_proficiency = request.form.getlist("r3")[0]
@@ -78,16 +79,18 @@ def teachers(chartID = 'chart_ID', chart_type = 'column', chart_height = 500, f_
 	title_text = 'Math Assessment Tracking - %s Teachers' % str(f_grade[4:])
 	title = {"text": title_text} 
 	xAxis = {"categories": teacher(f_grade,f_proficiency,f_quiz)[0],"labels":{"style":{"font-size":"16px","fontWeight":'bold'}}}
-	yAxis = {"min":0,"max":50,"title": {"text": 'Score %'}}
-	plotOptions = {"series":{"colorByPoint":"true","dataLabels":{"enabled":"true","format":'{y} pct',"valueDecimals":1,"inside":"true","color":"white","style":{"fontWeight":'bold',"fontSize":'20px'}}}}
-	tooltip = {"valueSuffix":' pct',"valueDecimals":1}
+	yAxis = {"min":0,"max":6,"title": {"text": 'Average Score'}}
+	plotOptions = {"series":{"colorByPoint":"true","dataLabels":{"enabled":"true","format":'{point.y:.2f}',"valueDecimals":2,"inside":"true","color":"white","style":{"fontWeight":'bold',"fontSize":'20px'}}}}
+	#plotOptions = {"series":{"colorByPoint":"true","dataLabels":{"enabled":"true","valueDecimals":2,"inside":"true","color":"white","style":{"fontWeight":'bold',"fontSize":'20px'}}}}
+	#tooltip = {"valueSuffix":' pct',"valueDecimals":1}
+	tooltip = {"valueDecimals":2}
 	return render_template('teacher.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis, plotOptions=plotOptions, tooltip=tooltip,grades=grades, \
 	proficiency_list=proficiency_groups, quizzes = relevant_quiz(f_grade), f_grade=f_grade, f_proficiency=f_proficiency,f_quiz=f_quiz)
 
 # by students with grade, teacher, and crt group filters
 @app.route('/students',methods=['POST','GET'])
 @login_required
-def students(f_grade = '0 - Kindergarten', f_teacher = 'Mr. Sternberg', f_proficiency='All'):	
+def students(f_grade = '2 - Second Grade', f_teacher = 'Monteath, Chelcie', f_proficiency='All'):	
 	if request.method == 'POST':
 		f_grade = request.form.getlist("r1")[0]
 		f_proficiency = request.form.getlist("r3")[0]
