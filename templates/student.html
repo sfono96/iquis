@@ -54,7 +54,7 @@
 </form>
 
 <style type="text/css">
-	table.sortable {font-family: Arial, helvetica, sans-serif; font-size:12px;color:#333333;width:1200px;border-width: 1px;border-color: #000000;border-collapse: collapse;}
+	table.sortable {font-family: Arial, helvetica, sans-serif; font-size:12px;color:#333333;border-width: 1px;border-color: #000000;border-collapse: collapse;}
 	table.sortable th {font-size:12px;background-color:#d3d3d3;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;text-align:left;}
 	table.sortable tr {background-color:#efefef;}
 	table.sortable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;}
@@ -69,51 +69,56 @@
 	}*/
 </style>
 
-<table class="sortable" border="1">
-	<thead>
-		<tr>
-			<th>Student</th>
-			{% for q in quizzes %}
-				<th>{{q}}</th>
-			{% endfor %}	
-		</tr>
-	</thead>
-	<tbody>
-		{% for st in students %}
+<div id = "myTbl" style="float: left" width="800px">
+	<table class="sortable" border="1">
+		<thead>
 			<tr>
-			{% for i in range(qcnt+1) %}
-				{% if i == 0 %}	
-					<td>{{st[i]}}</td>
-				{% elif st[i] == '' %}
-					<td style="background-color: grey; color: white; font-weight: bold;">{{st[i]}}</td>	
-				{% elif st[i] == 1 or st[i] == 0 %}
-					<td style="background-color: red; color: white; font-weight: bold;">{{st[i]}}</td>
-				{% elif st[i] == 2 %}
-					<td style="background-color: yellow; font-weight: bold;">{{st[i]}}</td>
-				{% elif st[i] == 3 %}
-					<td style="background-color: #66ff00; font-weight: bold;">{{st[i]}}</td>
-				{% else %}
-					<td style="background-color: #32CD32; font-weight: bold;">{{st[i]}}</td>
-				{% endif %}
-			{% endfor %}
+				<th>Student</th>
+				{% for q in quizzes %}
+					<th>{{q}}</th>
+				{% endfor %}	
 			</tr>
-		{% endfor %}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{% for st in students %}
+				<tr>
+				{% for i in range(qcnt+1) %}
+					{% if i == 0 %}	
+						<td>{{st[i]}}</td>
+					{% elif st[i] == '' %}
+						<td style="background-color: grey; color: white; font-weight: bold;">{{st[i]}}</td>	
+					{% elif st[i] == 1 or st[i] == 0 %}
+						<td style="background-color: red; color: white; font-weight: bold;">{{st[i]}}</td>
+					{% elif st[i] == 2 %}
+						<td style="background-color: yellow; font-weight: bold;">{{st[i]}}</td>
+					{% elif st[i] == 3 %}
+						<td style="background-color: #66ff00; font-weight: bold;">{{st[i]}}</td>
+					{% else %}
+						<td style="background-color: #32CD32; font-weight: bold;">{{st[i]}}</td>
+					{% endif %}
+				{% endfor %}
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
 
 <script type="text/javascript">			
-$(document).ready(function() 
+/*$(document).ready(function() 
     { 
         $("table").tablesorter({sortList: [[0,0], [1,0]]}); 
     } 
-); 
-// $(document).ready(function() {
-// 	$('table').dataTable( {
-// 		"sScrollY": "600px",
-// 		"bPaginate": false,
-// 		"bAutoWidth": false
-// 	} );
-// } );
+);*/ 
+$(document).ready(function() {
+	$('.sortable').dataTable( {
+		"sScrollY": "500px",
+		"sScrollX": "1200px",
+		"bPaginate": false,
+		"bAutoWidth": true,
+		//"bFilter":false,
+		"bInfo":false
+	} );
+} );
 </script>
 
 {% endblock %}	
