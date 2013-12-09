@@ -102,22 +102,22 @@ def students(f_grade = '2 - Second Grade', f_teacher = 'Monteath, Chelcie', f_pr
 	proficiency_list=proficiency_groups, f_grade=f_grade, f_teacher=f_teacher, f_proficiency=f_proficiency,qcnt=len(relevant_quiz(f_grade)))
 
 # by students with grade, teacher, and crt group filters
-@app.route('/attempts',methods=['POST','GET'])
-@login_required
-def retakes(f_grade = '0 - Kindergarten', f_teacher = 'Mr. Sternberg', f_proficiency='All'):	
-	f_quiz = relevant_quiz(f_grade)[0]
-	if request.method == 'POST':
-		f_grade = request.form.getlist("r1")[0]
-		f_teacher = request.form.getlist("r2")[0]
-		f_proficiency = request.form.getlist("r3")[0]
-		f_quiz = request.form.getlist("r4")[0]
-		if f_teacher not in relevant_teachers(f_grade):
-			f_teacher = relevant_teachers(f_grade)[0]
-		if f_quiz not in relevant_quiz(f_grade):
-			f_quiz = relevant_quiz(f_grade)[0]
-	students = student_attempts(f_grade,f_teacher,f_proficiency,f_quiz)
-	return render_template('retakes.html', quizzes=relevant_quiz(f_grade),students=students, grades=grades,teachers=relevant_teachers(f_grade), \
-	proficiency_list=proficiency_groups, f_grade=f_grade, f_teacher=f_teacher, f_proficiency=f_proficiency,f_quiz=f_quiz,acnt=3)
+# @app.route('/attempts',methods=['POST','GET'])
+# @login_required
+# def retakes(f_grade = '0 - Kindergarten', f_teacher = 'Mr. Sternberg', f_proficiency='All'):	
+# 	f_quiz = relevant_quiz(f_grade)[0]
+# 	if request.method == 'POST':
+# 		f_grade = request.form.getlist("r1")[0]
+# 		f_teacher = request.form.getlist("r2")[0]
+# 		f_proficiency = request.form.getlist("r3")[0]
+# 		f_quiz = request.form.getlist("r4")[0]
+# 		if f_teacher not in relevant_teachers(f_grade):
+# 			f_teacher = relevant_teachers(f_grade)[0]
+# 		if f_quiz not in relevant_quiz(f_grade):
+# 			f_quiz = relevant_quiz(f_grade)[0]
+# 	students = student_attempts(f_grade,f_teacher,f_proficiency,f_quiz)
+# 	return render_template('retakes.html', quizzes=relevant_quiz(f_grade),students=students, grades=grades,teachers=relevant_teachers(f_grade), \
+# 	proficiency_list=proficiency_groups, f_grade=f_grade, f_teacher=f_teacher, f_proficiency=f_proficiency,f_quiz=f_quiz,acnt=3)
 
 
 ##################### run #####################
