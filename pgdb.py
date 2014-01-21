@@ -4,7 +4,7 @@ from math import trunc
 
 ############ DB CONNECTION ############ 
 
-production = False # set this to true if pushing changes to production server (heroku) else keep false on development box
+production = True # set this to true if pushing changes to production server (heroku) else keep false on development box
 
 if production == False:
 
