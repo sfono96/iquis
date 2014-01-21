@@ -11,6 +11,8 @@
 <script src="/static/js/jquery-latest.js"></script>
 <script src="/static/js/jquery.tablesorter.js"></script>
 <script src="/static/js/jquery.dataTables.js"></script>
+<script src="/static/js/TableTools.min.js"></script>
+<!--<script src="/static/js/DataTables-1.9.4/extras/TableTools/media/js/TableTools.js"></script>-->
 <!-- <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
 
 <br><br><br>
@@ -109,6 +111,7 @@
         $("table").tablesorter({sortList: [[0,0], [1,0]]}); 
     } 
 );*/ 
+
 $(document).ready(function() {
 	$('.sortable').dataTable( {
 		"sScrollY": "500px",
@@ -116,7 +119,12 @@ $(document).ready(function() {
 		"bPaginate": false,
 		"bAutoWidth": true,
 		//"bFilter":false,
-		"bInfo":false
+		"bInfo":false,
+		"sDom": 'T<"clear">lfrtip',
+		"oTableTools": {
+			//"sSwfPath": "{{url_for('static',filename='copy_csv_xls_pdf.swf')}}"
+			"sSwfPath": "/static/copy_csv_xls_pdf.swf"
+		}
 	} );
 } );
 </script>
