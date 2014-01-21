@@ -98,14 +98,14 @@ def teacher(grade,proficiency,quiz):
 def students_list(grade,teacher,proficiency):
 	if proficiency == 'All':
 		if teacher == 'All':
-			sql = 'SELECT STUDENT, ASSESSMENT, SCORE FROM DATA WHERE GRADE = \'%s\' AND ATTEMPT = 1 ORDER BY 1,2;' % grade
+			sql = 'SELECT STUDENT, ASSESSMENT, SCORE, TEACHER FROM DATA WHERE GRADE = \'%s\' AND ATTEMPT = 1 ORDER BY 1,2;' % grade
 		else:
-			sql = 'SELECT STUDENT, ASSESSMENT, SCORE FROM DATA WHERE TEACHER = \'%s\' AND ATTEMPT = 1 ORDER BY 1,2;' % teacher
+			sql = 'SELECT STUDENT, ASSESSMENT, SCORE, TEACHER FROM DATA WHERE TEACHER = \'%s\' AND ATTEMPT = 1 ORDER BY 1,2;' % teacher
 	else:
 		if teacher == 'All':
-			sql = 'SELECT STUDENT, ASSESSMENT, SCORE FROM DATA WHERE GRADE = \'%s\' AND ATTEMPT = 1 AND PRIOR_YEAR_PROFICIENCY = \'%s\' ORDER BY 1,2;' % (grade,proficiency)
+			sql = 'SELECT STUDENT, ASSESSMENT, SCORE, TEACHER FROM DATA WHERE GRADE = \'%s\' AND ATTEMPT = 1 AND PRIOR_YEAR_PROFICIENCY = \'%s\' ORDER BY 1,2;' % (grade,proficiency)
 		else:
-			sql = 'SELECT STUDENT, ASSESSMENT, SCORE FROM DATA WHERE TEACHER = \'%s\' AND ATTEMPT = 1 AND PRIOR_YEAR_PROFICIENCY = \'%s\' ORDER BY 1,2;' % (teacher,proficiency)
+			sql = 'SELECT STUDENT, ASSESSMENT, SCORE, TEACHER FROM DATA WHERE TEACHER = \'%s\' AND ATTEMPT = 1 AND PRIOR_YEAR_PROFICIENCY = \'%s\' ORDER BY 1,2;' % (teacher,proficiency)
 	
 	quizzes = relevant_quiz(grade)
 
@@ -113,22 +113,48 @@ def students_list(grade,teacher,proficiency):
 	rs = cursor.fetchall()
 	data_series = []
 	sdict = {}
-	for r in rs:
-		if r[0] not in sdict:
-			sdict[r[0]] = {}
-			for quiz in quizzes:
-				if quiz not in sdict[r[0]]:
-					sdict[r[0]][quiz] = ''
+	# for r in rs:
+	# 	if r[0] not in sdict: # if student not in the dictionary
+	# 		sdict[r[0]] = {} # add student key to dictionary where value is another dictionary (to store quiz scores)
+	# 		for quiz in quizzes:
+	# 			if quiz not in sdict[r[0]]: # if quiz score in the dictionary for student 
+	# 				sdict[r[0]][quiz] = '' # blank place holder quiz score
 
-		if r[1] in sdict[r[0]]:
-			sdict[r[0]][r[1]] = float(r[2])
+	# 	if r[1] in sdict[r[0]]:
+	# 		sdict[r[0]][r[1]] = float(r[2]) # add real quiz score
+
+	# for k in sdict:
+	# 	list = []
+	# 	list.append(k)
+	# 	for q in quizzes:
+	# 		if sdict[k][q] <> '':
+	# 			list.append(float(sdict[k][q]))
+	# 		else:
+	# 			list.append('')
+	# 	data_series.append(list)
+
+	# data_series = sorted(data_series)
+	# return data_series
+
+	for r in rs:
+		if r[0] not in sdict: # if student not in the dictionary
+			sdict[r[0]] = [] # will be a list where first value is teacher name and second value is dictionary of quiz scores
+			sdict[r[0]].append(r[3]) # teacher
+			sdict[r[0]].append({}) # dictionary of quiz scores
+			for quiz in quizzes:
+				if quiz not in sdict[r[0]][1]: # if quiz score in the dictionary for student 
+					sdict[r[0]][1][quiz] = '' # blank place holder quiz score
+
+		if r[1] in sdict[r[0]][1]:
+			sdict[r[0]][1][r[1]] = float(r[2]) # add real quiz score
 
 	for k in sdict:
 		list = []
-		list.append(k)
+		list.append(sdict[k][0]) # teacher
+		list.append(k) # student
 		for q in quizzes:
-			if sdict[k][q] <> '':
-				list.append(float(sdict[k][q]))
+			if sdict[k][1][q] <> '':
+				list.append(float(sdict[k][1][q]))
 			else:
 				list.append('')
 		data_series.append(list)

@@ -12,6 +12,7 @@
 <script src="/static/js/jquery.tablesorter.js"></script>
 <script src="/static/js/jquery.dataTables.js"></script>
 <script src="/static/js/TableTools.min.js"></script>
+<script src="/static/css/TableTools.css"></script>
 <!--<script src="/static/js/DataTables-1.9.4/extras/TableTools/media/js/TableTools.js"></script>-->
 <!-- <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
 
@@ -75,6 +76,7 @@
 	<table class="sortable" border="1">
 		<thead>
 			<tr>
+				<th>Teacher</th>
 				<th>Student</th>
 				{% for q in quizzes %}
 					<th>{{q}}</th>
@@ -84,8 +86,8 @@
 		<tbody>
 			{% for st in students %}
 				<tr>
-				{% for i in range(qcnt+1) %}
-					{% if i == 0 %}	
+				{% for i in range(qcnt+2) %}
+					{% if i < 2  %}	
 						<td>{{st[i]}}</td>
 					{% elif st[i] == '' %}
 						<td style="background-color: grey; color: white; font-weight: bold;">{{st[i]}}</td>	
@@ -122,6 +124,7 @@ $(document).ready(function() {
 		"bInfo":false,
 		"sDom": 'T<"clear">lfrtip',
 		"oTableTools": {
+			"aButtons":["print"],
 			//"sSwfPath": "{{url_for('static',filename='copy_csv_xls_pdf.swf')}}"
 			"sSwfPath": "/static/copy_csv_xls_pdf.swf"
 		}
