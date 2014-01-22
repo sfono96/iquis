@@ -11,8 +11,14 @@
 <script src="/static/js/jquery-latest.js"></script>
 <script src="/static/js/jquery.tablesorter.js"></script>
 <script src="/static/js/jquery.dataTables.js"></script>
-<script src="/static/js/TableTools.min.js"></script>
+<!-- <script src="/static/js/TableTools.min.js"></script>
 <script src="/static/css/TableTools.css"></script>
+ -->
+<link rel="stylesheet" href="/static/js/DataTables-1.9.4/extras/TableTools/media/css/TableTools.css">
+<script src="/static/js/DataTables-1.9.4/extras/TableTools/media/js/TableTools.min.js"></script>
+<link rel="stylesheet" href="/static/js/DataTables-1.9.4/extras/ColVis/media/css/ColVis.css">
+<script src="/static/js/DataTables-1.9.4/extras/ColVis/media/js/ColVis.min.js"></script>
+
 <!--<script src="/static/js/DataTables-1.9.4/extras/TableTools/media/js/TableTools.js"></script>-->
 <!-- <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
 
@@ -58,22 +64,14 @@
 
 <style type="text/css">
 	table.sortable {font-family: Arial, helvetica, sans-serif; font-size:12px;color:#333333;border-width: 1px;border-color: #000000;border-collapse: collapse;}
-	table.sortable th {font-size:12px;background-color:#d3d3d3;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;text-align:left;}
+	table.sortable th {font-size:12px;background-color:#d3d3d3;border-width: 1px;padding: 8px;margin-top:5px;border-style: solid;border-color: #000000;text-align:left;}
 	table.sortable tr {background-color:#efefef;}
 	table.sortable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #000000;}
-/*	table {
-		font-family: arial;
-		border-width: 1px;
-		border-color: #000000;
-		border-collapse: collapse;
-		table-layout: fixed;
-		width:1000px;
-		overflow: hidden;
-	}*/
+	#myTbl {max-width: 1200px; min-width: 1200px; margin: 0 auto;}
 </style>
 
-<div id = "myTbl" style="float: left" width="800px">
-	<table class="sortable" border="1">
+<div id = "myTbl" style="float: left;">
+	<table class="sortable" border="1" width="100%">
 		<thead>
 			<tr>
 				<th>Teacher</th>
@@ -116,18 +114,21 @@
 
 $(document).ready(function() {
 	$('.sortable').dataTable( {
-		"sScrollY": "500px",
-		"sScrollX": "1200px",
+		"sScrollY": "450px",
+		"sScrollX": "100%",
 		"bPaginate": false,
 		"bAutoWidth": true,
 		//"bFilter":false,
 		"bInfo":false,
-		"sDom": 'T<"clear">lfrtip',
+		"sDom": 'TC<"clear">lfrtip',
 		"oTableTools": {
-			"aButtons":["print"],
+			//"aButtons":["print"],
 			//"sSwfPath": "{{url_for('static',filename='copy_csv_xls_pdf.swf')}}"
-			"sSwfPath": "/static/copy_csv_xls_pdf.swf"
-		}
+			"sSwfPath": "/static/js/DataTables-1.9.4/extras/TableTools/media/swf/copy_csv_xls_pdf.swf"
+		},
+		"oColVis": {
+            "sAlign": "right"
+        }
 	} );
 } );
 </script>
